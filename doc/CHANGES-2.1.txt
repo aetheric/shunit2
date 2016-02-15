@@ -1,7 +1,19 @@
 Changes in shUnit2 2.1.X
 ========================
 
+Changes with 2.1.2
+------------------
+
+Unset additional variables that were missed.
+
+Added checks and workarounds to improve zsh compatibility.
+
+Added some argument count checks ``assertEquals()``, ``assertNull()``, and
+``assertSame()``
+
+
 Changes with 2.1.1
+------------------
 
 Fixed bug where ``fail()`` was not honoring skipping.
 
@@ -66,4 +78,4 @@ result, rather than just those successful.
 
 
 .. $Revision$
-.. vim:spell
+.. vim:ft=rst:spell:textwidth=80

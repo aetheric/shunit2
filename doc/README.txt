@@ -49,10 +49,12 @@ To get the versions of the various shells, do the following:
 | Shell | OS      | Notes                                                     |
 +=======+=========+===========================================================+
 | bash  |         | ``$ bash --version``                                      |
-+-------+-+-------+-----------------------------------------------------------+
++-------+---------+-----------------------------------------------------------+
 | dash  | Linux   | ``$ dpkg -l |grep dash``                                  |
 +-------+---------+-----------------------------------------------------------+
 | ksh   |         | ``$ ksh --version``                                       |
+|       |         | -or-                                                      |
+|       |         | ``$ echo 'echo $KSH_VERSION' |ksh``                       |
 |       +---------+-----------------------------------------------------------+
 |       | Cygwin  | see pdksh                                                 |
 |       +---------+-----------------------------------------------------------+
@@ -95,12 +97,15 @@ we'd better build it. ::
   ...
   $ cp -p build/shunit2.html doc
   $ rst2html --stylesheet-path=share/css/rst2html.css doc/README.txt >doc/README.html
-  $ svn ci -m "" doc/shunit2.html
 
 Check In All the Code
 ---------------------
 
-This step is pretty self-explainatory
+This step is pretty self-explainatory ::
+
+  $ pwd
+  .../shunit2/source/2.0
+  $ svn ci -m "finalizing release"
 
 Tag the Release
 ---------------
@@ -118,7 +123,7 @@ Export the Release
 
   $ pwd
   .../shunit2/builds
-  $ svn export https://svn.sourceforge.net/svnroot/shunit2/tags/source/2.0.0 shunit2-2.0.0
+  $ svn export https://shunit2.svn.sourceforge.net/svnroot/shunit2/tags/source/2.0.0 shunit2-2.0.0
 
 Create Tarball
 --------------
@@ -148,9 +153,8 @@ time if needed. ::
   $ svn cp -m "Release 2.0.0" \
   website https://shunit2.svn.sourceforge.net/svnroot/shunit2/tags/website/20060916
 
-Now, copy the website into place ::
-
-  $ rsync -aP --delete --exclude '.svn' website/ sf.net:www/projects/shunit2
+Now, update the website. It too is held in Subversion, so **ssh** into
+SourceForge and use ``svn up`` to grab the latest version.
 
 Post to SourceForge and Freshmeat
 ---------------------------------

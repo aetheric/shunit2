@@ -1,5 +1,14 @@
-# $Id: test-functions.inc 416 2007-01-04 00:50:14Z sfsetse $
+# $Id$
 # vim:syntax=sh:sts=2
+
+#
+# shell workarounds
+#
+
+if [ -n "${ZSH_VERSION}" ]; then
+  emulate -LR sh
+  unsetopt function_argzero
+fi
 
 #
 # constants
