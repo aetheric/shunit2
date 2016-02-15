@@ -1,6 +1,63 @@
 Changes in shUnit2 2.1.X
 ========================
 
+Changes with 2.1.5
+------------------
+
+Issue# 1: Fixed bug pointed out by R Bernstein in the trap code where certain
+types of exit conditions did not generate the ending report.
+
+Issue# 2: Added assertNotEquals() assert.
+
+Issue# 3: Moved check for unset variables out of shUnit2 into the unit tests.
+Testing poorly written software blows up if this check is in, but it is only
+interesting for shUnit2 itself. Added shunit_test_output.sh unit test for this.
+Some shells still do not catch such errors properly (e.g. Bourne shell and BASH
+2.x).
+
+Added new custom assert in test_helpers to check for output to STDOUT, and none
+to STDERR.
+
+Replaced fatal message in the temp directory creation with a _shunit_fatal()
+function call.
+
+Fixed test_output unit test so it works now that the 'set -u' stuff was removed
+for Issue# 3.
+
+Flushed out the coding standards in the README.txt a bit more, and brought the
+shunit2 code up to par with the documented standards.
+
+Issue# 4: Completely changed the reporting output to be a closer match for
+JUnit and PyUnit. As a result, tests are counted separately from assertions.
+
+Provide public shunit_tmpDir variable that can be used by unit test scripts that
+need automated and guaranteed cleanup.
+
+Issue# 7: Fixed duplicated printing of messages passed to asserts.
+
+Per code review, fixed wording of failSame() and failNotSame() messages.
+
+Replaced version_info.sh with versions library and made appropriate changes in
+other scripts to use it.
+
+Added gen_test_results.sh to make releases easier.
+
+Fixed bugs in shlib_relToAbsPath() in shlib.
+
+Converted DocBook documentation to reStructuredText for easier maintenance. The
+DocBook documentation is now considered obsolete, and will be removed in a
+future release.
+
+Issue# 5: Fixed the documentation around the usage of failures.
+
+Issue# 9: Added unit tests and updated documentation to demonstrate the
+requirement of quoting values twice when macros are used. This is due to how
+shell parses arguments.
+
+When an invalid number of arguments is passed to a function, the invalid number
+is returned to the user so they are more aware of what the cause might be.
+
+
 Changes with 2.1.4
 ------------------
 
@@ -122,4 +179,4 @@ result, rather than just those successful.
 
 
 .. $Revision$
-.. vim:ft=rst:spell:textwidth=80
+.. vim:fileencoding=latin1:ft=rst:spell:tw=80
