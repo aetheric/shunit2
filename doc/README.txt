@@ -2,8 +2,51 @@
 shUnit2 2.1.x README
 ====================
 
+Coding Standards
+================
+
+*Note: these are incomplete*
+
++------------------+---------------------------+
+| type             | sample                    |
++==================+===========================+
+| local variable   | ``shunit_someVariable_``  |
++------------------+---------------------------+
+| global variable  | ``__shunit_someVariable`` |
++------------------+---------------------------+
+| public constant  | ``SHUNIT_TRUE``           |
++------------------+---------------------------+
+| private constant | ``__SHUNIT_SHELL_FLAGS``  |
++------------------+---------------------------+
+| public function  | ``assertEquals``          |
++------------------+---------------------------+
+| private function | ``_shunit_someFunction``  |
++------------------+---------------------------+
+| macro            | ``_SHUNIT_SOME_MACRO_``   |
++------------------+---------------------------+
+
+code.google.com
+===============
+
+This project is stored on code.google.com as http://code.google.com/p/shunit2/.
+All releases as of 2.1.4 and full source are available there. Documentation is
+included as part of the source and each release. Source code is stored in
+Subversion and can be accessed using the following information.
+
+Browse the code in a web browser:
+
+- http://code.google.com/p/shunit2/source/browse
+- svn > trunk > source > 2.1
+
+Check out the code locally ::
+
+  $ svn checkout http://shunit2.googlecode.com/svn/trunk/ shflags-read-only
+
+
 SourceForge
 ===========
+
+DEPRECATED
 
 This project is stored on SourceForge as http://sf.net/projects/shunit2. The
 source code is stored in Subversion and can be accessed using the following
@@ -69,11 +112,14 @@ To get the versions of the various shells, do the following:
 | zsh   |         | ``$ zsh --version``                                       |
 +-------+---------+-----------------------------------------------------------+
 
+Alternativly, a ``version_info.sh`` script is included in the ``bin`` directory
+that provides similar information.
+
 Update Version
 --------------
 
 Edit ``src/shell/shunit2`` and change the version number in the comment, as well
-as in the ``__SHUNIT_VERSION`` variable. Next, edit the
+as in the ``SHUNIT_VERSION`` variable. Next, edit the
 ``src/docbook/shunit2.xml`` file, edit the version in the ``<title>`` element,
 and make sure there is a revision section for this release.
 
@@ -115,7 +161,7 @@ Tag the Release
   .../shunit2/source
   $ ls
   2.0  2.1
-  $ svn cp -m "Release 2.0.0" 2.0 https://shunit2.svn.sourceforge.net/svnroot/shunit2/tags/source/2.0.0
+  $ svn cp -m "Release 2.0.0" 2.0 https://shunit2.googlecode.com/svn/tags/source/2.0.0
 
 Export the Release
 ------------------
@@ -123,7 +169,7 @@ Export the Release
 
   $ pwd
   .../shunit2/builds
-  $ svn export https://shunit2.svn.sourceforge.net/svnroot/shunit2/tags/source/2.0.0 shunit2-2.0.0
+  $ svn export https://shunit2.googlecode.com/svn/tags/source/2.0.0 shunit2-2.0.0
 
 Create Tarball
 --------------
@@ -151,15 +197,15 @@ time if needed. ::
   $ ls
   source  website
   $ svn cp -m "Release 2.0.0" \
-  website https://shunit2.svn.sourceforge.net/svnroot/shunit2/tags/website/20060916
+  website https://shunit2.googlecode.com/svn/tags/website/20060916
 
-Now, update the website. It too is held in Subversion, so **ssh** into
-SourceForge and use ``svn up`` to grab the latest version.
+Now, update the website. It too is held in Subversion, so **ssh** into the web
+server and use ``svn up`` to grab the latest version.
 
-Post to SourceForge and Freshmeat
----------------------------------
+Post to code.google.com and Freshmeat
+-------------------------------------
 
-- http://sourceforge.net/projects/shunit2/
+- http://code.google.com/p/shunit2/
 - http://freshmeat.net/
 
 

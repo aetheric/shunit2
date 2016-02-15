@@ -1,16 +1,25 @@
 #! /bin/sh
 # $Id$
+#
+# Copyright 2008 Kate Ward. All Rights Reserved.
+# Released under the LGPL (GNU Lesser General Public License)
+#
+# Author: kate.ward@forestent.com (Kate Ward)
+#
+# shUnit2 unit test wrapper
 
 MY_NAME=`basename $0`
 MY_PATH=`dirname $0`
 
+PREFIX='shunit2_test_'
 SHELLS='/bin/sh /bin/bash /bin/dash /bin/ksh /bin/pdksh /bin/zsh'
-for f in test[A-Z]*; do
-  [ -x "${f}" ] && TESTS="${TESTS:+${TESTS} }${f}"
+TESTS=''
+for test in ${PREFIX}[a-z]*.sh; do
+  TESTS="${TESTS} ${test}"
 done
 
 # load common unit test functions
-. "${MY_PATH}/test-functions.inc"
+. ./shunit2_test_helpers
 
 usage()
 {
@@ -45,7 +54,7 @@ tests=${tests:-${TESTS}}
 
 # error checking
 if [ -z "${tests}" ]; then
-  tf_error 'no tests found to run; exiting'
+  th_error 'no tests found to run; exiting'
   exit 1
 fi
 
@@ -80,7 +89,7 @@ for shell in ${shells}; do
 
   # check for existance of shell
   if [ ! -x ${shell} ]; then
-    tf_warn "unable to run tests with the ${shell} shell"
+    th_warn "unable to run tests with the ${shell} shell"
     continue
   fi
 
@@ -92,7 +101,6 @@ for shell in ${shells}; do
 EOF
 
   shell_name=`basename ${shell}`
-  shell_opts=''
   case ${shell_name} in
     bash) echo; ${shell} --version; ;;
     dash) ;;
@@ -101,18 +109,24 @@ EOF
       exitVal=$?
       if [ ${exitVal} -eq 2 ]; then
         echo
-        echo "${version}"
+        echo "version: ${version}"
       fi
       ;;
     pdksh) ;;
-    zsh) echo; ${shell} --version; ;;
+    zsh)
+      version=`echo 'echo ${ZSH_VERSION}' |${shell}`
+      echo
+      echo "version: ${version}"
+      ;;
   esac
 
   # execute the tests
   for suite in ${tests}; do
-    suiteName=`expr "${suite}" : 'test\(.*\)'`
+    suiteName=`expr "${suite}" : "${PREFIX}\(.*\).sh"`
     echo
     echo "--- Executing the '${suiteName}' test suite ---" >&2
     ( exec ${shell} ${shell_opts} ./${suite}; )
   done
 done
+
+# vim:et:ft=sh:sts=2:sw=2
