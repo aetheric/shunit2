@@ -117,7 +117,7 @@ we'd better build it. ::
   $ pwd
   .../shunit2/source/2.1
   $ cd doc
-  $ RST2HTML_OPTS='--stylesheet-path=../share/css/rst2html.css'
+  $ RST2HTML_OPTS='--stylesheet-path=rst2html.css'
   $ rst2html ${RST2HTML_OPTS} shunit2.txt >shunit2.html
   $ rst2html ${RST2HTML_OPTS} README.txt >README.html
 
@@ -154,20 +154,19 @@ Create Tarball
 
   $ tar cfz ../releases/shunit2-2.0.0.tgz shunit2-2.0.0
 
-md5sum the Tarball and Sign With gpg
-------------------------------------
+Sign the Tarball with gpg
+-------------------------
 ::
 
   $ cd ../releases
-  $ md5sum shunit2-2.0.0.tgz >shunit2-2.0.0.tgz.md5
   $ gpg --default-key kate.ward@forestent.com --detach-sign shunit2-2.0.0.tgz
 
 Update Website
 --------------
 
-Again, pretty self-explanatory. Make sure to copy the MD5 and GPG signature
-files. Once that is done, make sure to tag the website so we can go back in
-time if needed. ::
+Again, pretty self-explanatory. Make sure to copy the GPG signature file. Once
+that is done, make sure to tag the website so we can go back in time if needed.
+::
 
   $ pwd
   .../shunit2

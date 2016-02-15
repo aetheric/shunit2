@@ -29,7 +29,7 @@ LIB_DIR="${BASE_DIR}/lib"
 . ${LIB_DIR}/versions || die 'unable to load versions library'
 
 BASE_DIR=`shlib_relToAbsPath "${BASE_DIR}"`
-SRC_DIR="${BASE_DIR}/src/shell"
+SRC_DIR="${BASE_DIR}/src"
 
 os_name=`versions_osName |sed 's/ /_/g'`
 os_version=`versions_osVersion`
@@ -38,7 +38,7 @@ DEFINE_boolean force false 'force overwrite' f
 DEFINE_string output_dir "`pwd`" 'output dir' d
 DEFINE_string output_file "${os_name}-${os_version}.txt" 'output file' o
 DEFINE_string suite 'shunit2_test.sh' 'unit test suite' s
-FLAGS "$@" || exit $?; shift ${FLAGS_ARGC}
+FLAGS "${@:-}" || exit $?; shift ${FLAGS_ARGC}
 
 # determine output filename
 output="${FLAGS_output_dir:+${FLAGS_output_dir}/}${FLAGS_output_file}"
@@ -53,6 +53,7 @@ if [ -f "${output}" ]; then
     exit ${FLAGS_ERROR}
   fi
 fi
+touch "${output}" 2>/dev/null || die "unable to write to '${output}'"
 
 # run tests
 ( cd "${SRC_DIR}"; ./${FLAGS_suite} |tee "${output}" )

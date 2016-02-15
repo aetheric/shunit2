@@ -22,13 +22,15 @@ for test in ${PREFIX}[a-z]*.sh; do
 done
 
 # load common unit test functions
-. ../../lib/versions
+. ../lib/versions
 . ./shunit2_test_helpers
 
 usage()
 {
   echo "usage: ${MY_NAME} [-e key=val ...] [-s shell(s)] [-t test(s)]"
 }
+
+env=''
 
 # process command line flags
 while getopts 'e:hs:t:' opt; do
@@ -68,20 +70,19 @@ cat <<EOF
 #
 
 # test run info
-shells="${shells}"
-tests="${tests}"
+shells: ${shells}
+tests: ${tests}
 EOF
-if [ -n "${env:-}" ]; then
-  for key in ${env}; do
-    eval "echo \"${key}=\$${key}\""
-  done
-fi
+for key in ${env}; do
+  eval "echo \"${key}=\$${key}\""
+done
 echo
 
 # output system data
 echo "# system info"
 echo "$ date"
 date
+echo
 
 echo "$ uname -mprsv"
 uname -mprsv
@@ -106,6 +107,7 @@ for shell in ${shells}; do
 #
 EOF
 
+  SHUNIT_SHELL=${shell}  # pass shell onto tests
   shell_name=`basename ${shell}`
   shell_version=`versions_shellVersion "${shell}"`
 
