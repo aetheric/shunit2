@@ -1,5 +1,5 @@
 #! /bin/sh
-# $Id: gen_test_results.sh 54 2008-10-21 23:29:23Z kate.ward@forestent.com $
+# $Id: gen_test_results.sh 187 2013-01-15 00:01:51Z kate.ward@forestent.com $
 # vim:et:ft=sh:sts=2:sw=2
 #
 # Copyright 2008 Kate Ward. All Rights Reserved.
@@ -28,35 +28,61 @@ LIB_DIR="${BASE_DIR}/lib"
 . ${LIB_DIR}/shlib || die 'unable to load shlib library'
 . ${LIB_DIR}/versions || die 'unable to load versions library'
 
+# redefining BASE_DIR now that we have the shlib functions
 BASE_DIR=`shlib_relToAbsPath "${BASE_DIR}"`
+BIN_DIR="${BASE_DIR}/bin"
 SRC_DIR="${BASE_DIR}/src"
 
 os_name=`versions_osName |sed 's/ /_/g'`
 os_version=`versions_osVersion`
 
+# load external flags
+. ${BIN_DIR}/gen_test_results.flags
+
+# define flags
 DEFINE_boolean force false 'force overwrite' f
 DEFINE_string output_dir "`pwd`" 'output dir' d
 DEFINE_string output_file "${os_name}-${os_version}.txt" 'output file' o
-DEFINE_string suite 'shunit2_test.sh' 'unit test suite' s
-FLAGS "${@:-}" || exit $?; shift ${FLAGS_ARGC}
+DEFINE_boolean dry_run false "supress logging to a file" n
 
-# determine output filename
-output="${FLAGS_output_dir:+${FLAGS_output_dir}/}${FLAGS_output_file}"
-output=`shlib_relToAbsPath "${output}"`
+main()
+{
+  # determine output filename
+  output="${FLAGS_output_dir:+${FLAGS_output_dir}/}${FLAGS_output_file}"
+  output=`shlib_relToAbsPath "${output}"`
 
-# checks
-if [ -f "${output}" ]; then
-  if [ ${FLAGS_force} -eq ${FLAGS_TRUE} ]; then
-    rm -f "${output}"
-  else
-    echo "not overwriting '${output}'" >&2
-    exit ${FLAGS_ERROR}
+  # checks
+  [ -n "${FLAGS_suite:-}" ] || die 'suite flag missing'
+
+  if [ ${FLAGS_dry_run} -eq ${FLAGS_FALSE} -a -f "${output}" ]; then
+    if [ ${FLAGS_force} -eq ${FLAGS_TRUE} ]; then
+      rm -f "${output}"
+    else
+      echo "not overwriting '${output}'" >&2
+      exit ${FLAGS_ERROR}
+    fi
   fi
-fi
-touch "${output}" 2>/dev/null || die "unable to write to '${output}'"
+  if [ ${FLAGS_dry_run} -eq ${FLAGS_FALSE} ]; then
+    touch "${output}" 2>/dev/null || die "unable to write to '${output}'"
+  fi
 
-# run tests
-( cd "${SRC_DIR}"; ./${FLAGS_suite} |tee "${output}" )
+  # run tests
+  (
+    cd "${SRC_DIR}";
+    if [ ${FLAGS_dry_run} -eq ${FLAGS_FALSE} ]; then
+      ./${FLAGS_suite} |tee "${output}"
+    else
+      ./${FLAGS_suite}
+    fi
+  )
 
-echo >&2
-echo "output written to '${output}'" >&2
+  if [ ! ${FLAGS_dry_run} ]; then
+    echo >&2
+    echo "output written to '${output}'" >&2
+  fi
+}
+
+FLAGS "$@" || exit $?
+[ ${FLAGS_help} -eq ${FALSE} ] || exit
+eval set -- "${FLAGS_ARGV}"
+main "${@:-}"

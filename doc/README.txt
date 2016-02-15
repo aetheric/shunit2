@@ -119,7 +119,6 @@ we'd better build it. ::
   $ cd doc
   $ RST2HTML_OPTS='--stylesheet-path=rst2html.css'
   $ rst2html ${RST2HTML_OPTS} shunit2.txt >shunit2.html
-  $ rst2html ${RST2HTML_OPTS} README.txt >README.html
 
 Check In All the Code
 ---------------------
@@ -165,8 +164,7 @@ Update Website
 --------------
 
 Again, pretty self-explanatory. Make sure to copy the GPG signature file. Once
-that is done, make sure to tag the website so we can go back in time if needed.
-::
+done, make sure to tag the website so we can go back in time if needed. ::
 
   $ pwd
   .../shunit2
